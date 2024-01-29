@@ -1,15 +1,13 @@
 import classes from './MainNavigation.module.css';
 import Home from '../pages/Home';
 import Events from '../pages/Events';
-import EventDetails from '../pages/EventDetails';
 import NewEvent from '../pages/NewEvent';
-import EditEvent from '../pages/EditEvent';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const routes = [
   { path: '/', element: <Home />, title: 'Home' },
-  { path: '/events', element: <Events />, title: 'Events' },
-  { path: '/new', element: <NewEvent />, title: 'New event' },
+  { path: 'events', element: <Events />, title: 'Events' },
+  { path: 'events/new', element: <NewEvent />, title: 'New event' },
 ];
 
 function MainNavigation() {
@@ -17,15 +15,20 @@ function MainNavigation() {
     <header className={classes.header}>
       <nav>
         <ul className={classes.list}>
-          {routes.map((route) => (
-            <NavLink
-              key={`${route.path}`}
-              to={route.path}
-              className={({ isActive }) => (isActive ? `${classes.active}` : '')}
-            >
-              {route.title}
-            </NavLink>
-          ))}
+          <NavLink
+            to="/"
+            className={({ isActive }) => (isActive ? `${classes.active}` : undefined)}
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="events"
+            className={({ isActive }) => (isActive ? `${classes.active}` : undefined)}
+            end
+          >
+            Events
+          </NavLink>
         </ul>
       </nav>
     </header>

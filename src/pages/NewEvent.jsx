@@ -4,7 +4,7 @@ import EventForm from '../components/EventForm';
 const NewEvent = () => {
   return (
     <div>
-      <EventForm />
+      <EventForm method="post" />
     </div>
   );
 };
