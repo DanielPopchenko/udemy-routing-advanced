@@ -1,29 +1,28 @@
-import { useLoaderData, json } from 'react-router-dom';
+import { useLoaderData, json, defer, Await } from 'react-router-dom';
 
 import EventsList from '../components/EventsList';
+import { Suspense } from 'react';
 
 // ! here we store loader function
 
 function Events() {
   // This data will be that data that is returned from the loader function
   // ! I do not need to use it here, i can use ir deeper in EventsList
-  const data = useLoaderData();
+  const { events } = useLoaderData();
 
-  if (data.isError) {
-    return <p>{data.message}</p>;
-  }
-
-  const events = data.events;
+  // Suspense -> to show a fallback while something is loading/fetching
   return (
-    <>
-      <EventsList events={events} />
-    </>
+    <Suspense fallback={<p style={{ textAlign: 'center' }}>Loading...</p>}>
+      <Await resolve={events}>
+        {(loadedEvents) => <EventsList events={loadedEvents} />}
+      </Await>
+    </Suspense>
   );
 }
 
 export default Events;
 
-export const loader = async () => {
+const loadEvents = async () => {
   const response = await fetch('http://localhost:8080/events');
   if (!response.ok) {
     // return { isError: true, message: 'Could not fetch events!' };
@@ -44,11 +43,13 @@ export const loader = async () => {
     // ! function that converts data to json
     throw json({ message: 'Could not fetch events.' }, { status: 500 });
   } else {
-    // const resData = await response.json();
-    // // ! this returned value will be available in components
-    // // ! where you use useLoaderData() hook.
-    // // ? Here I`ll always get a data, not Promise, because Router
-    // // ? checks if Promise is ok and returns actual data from it
-    return response;
+    const resData = await response.json();
+    // ! that is required because now we have this obj with events key
+    return resData.events;
   }
+};
+
+export const loader = () => {
+  //  ! here between {} - we bundle all http requests that are going on
+  return defer({ events: loadEvents() });
 };

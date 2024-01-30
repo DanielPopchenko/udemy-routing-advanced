@@ -1,36 +1,41 @@
-import classes from './MainNavigation.module.css';
-import Home from '../pages/Home';
-import Events from '../pages/Events';
-import NewEvent from '../pages/NewEvent';
 import { NavLink } from 'react-router-dom';
 
-const routes = [
-  { path: '/', element: <Home />, title: 'Home' },
-  { path: 'events', element: <Events />, title: 'Events' },
-  { path: 'events/new', element: <NewEvent />, title: 'New event' },
-];
+import classes from './MainNavigation.module.css';
+import NewsletterSignup from '../pages/NewsletterSigup';
 
 function MainNavigation() {
   return (
     <header className={classes.header}>
       <nav>
         <ul className={classes.list}>
-          <NavLink
-            to="/"
-            className={({ isActive }) => (isActive ? `${classes.active}` : undefined)}
-          >
-            Home
-          </NavLink>
-
-          <NavLink
-            to="events"
-            className={({ isActive }) => (isActive ? `${classes.active}` : undefined)}
-            end
-          >
-            Events
-          </NavLink>
+          <li>
+            <NavLink
+              to="/"
+              className={({ isActive }) => (isActive ? classes.active : undefined)}
+              end
+            >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/events"
+              className={({ isActive }) => (isActive ? classes.active : undefined)}
+            >
+              Events
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/newsletter"
+              className={({ isActive }) => (isActive ? classes.active : undefined)}
+            >
+              Newsletter
+            </NavLink>
+          </li>
         </ul>
       </nav>
+      <NewsletterSignup />
     </header>
   );
 }
